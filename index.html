@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire HTML avec Google Sheets</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+         @font-face {
+          font-family: 'Ted Next';
+          src: url('https://raw.githubusercontent.com/rogersrepaccess/devis/main/fonts/TedNext-Regular.woff') format('woff');
+          font-weight: normal;
+          font-style: normal;
+        } 
+        body {
+            font-family: Ted Next;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        body {
+            text-align: center;
+        }
+        fieldset {
+            border: 2px solid #DA291C;
+            padding: 15px;
+            margin-bottom: 20px;
+          border-radius: 8px;
+        }
+        legend {
+            color: #DA291C;
+            font-weight: bold;
+            padding: 0 10px;
+          font-size: 24px;
+          margin-left: -5px;
+        }
+      
+        #header-image {
+          width: 600px;
+          margin-top: 50px;
+        }
+      
+        h1 {
+          margin-bottom: 30px;
+          margin-top: 30px;
+        }
+      
+        .input-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .input-group img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+        .input-group label {
+            flex: 1;
+            margin-right: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .input-group label .info-icon {
+            margin-left: 5px;
+            cursor: pointer;
+            color: #DA291C;
+        }
+        .input-group input {
+            padding: 10px;
+            font-size: 16px;
+        }
+      
+        #billets5, #billets10, #billets20, #billets50, #billets100 {
+          width: 20%;
+          border-radius: 7px;
+          font-family: Ted Next;
+          font-size: 16px;
+          background-color: #F2F2F2;
+          border: 1px solid #999999;
+          font-weight: bold;
+        }
+      
+        #pieces {
+          width: 36%;
+          border-radius: 7px;
+          font-family: Ted Next;
+          font-size: 16px;
+          background-color: #F2F2F2;
+          border: 1px solid #999999;
+          font-weight: bold;
+        }
+      
+        #deposant {
+          width: 36%;
+          border-radius: 7px;
+          font-family: Ted Next;
+          font-size: 16px;
+          background-color: #F2F2F2;
+          border: 1px solid #999999;
+          font-weight: bold;
+        }
+      
+        #sac {
+          width: 36%;
+          border-radius: 7px;
+          font-family: Courier New;
+          font-size: 16px;
+          background-color: #F2F2F2;
+          border: 1px solid #999999;
+          font-weight: bold;
+        }
+      
+        .input-group button {
+            padding: 10px;
+            font-size: 16px;
+            margin-left: 5px;
+        }
+        #loader {
+            display: none;
+            text-align: center;
+        }
+        #loader img {
+            width: 50px;
+            height: 50px;
+        }
+        #download-button {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+            margin: auto;
+            font-size: 24px;
+            padding: 8px;
+            padding-left: 12px;
+            padding-right: 12px;
+            font-family: Ted Next;
+            font-weight: bold;
+            background-color: #00a6fb;
+            color: white;
+            border-radius: 10px;
+            border: 0px;
+            cursor: pointer;
+            transition-duration: 200ms;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+      
+        #download-button:hover {
+          background-color: #0582ca;
+          box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+          padding-left: 15px;
+          padding-right: 15px;
+          padding-top: 11px;
+          padding-bottom: 11px;
+        }
+      
+        .disabled {
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        #button-plus {
+          width: 30px;
+          height: 30px;
+          border-radius: 15px;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          line-height: 0; /* Réduit l'espacement vertical autour de l'icône */
+          text-align: center; /* Centre correctement l'icône */
+          cursor: pointer;
+          background-color: #8cb369;
+          border: 0px;
+          color: white;
+          transition-duration: 200ms;
+          margin-left: 20px;
+        }
+      
+        #button-plus:hover {
+          background-color: #648844;
+        }
+      
+        #button-minus {
+          width: 30px;
+          height: 30px;
+          border-radius: 15px;
+          padding: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 16px;
+          line-height: 0; /* Réduit l'espacement vertical autour de l'icône */
+          text-align: center; /* Centre correctement l'icône */
+          cursor: pointer;
+          background-color: #ef233c;
+          border: 0px;
+          color: white;
+          transition-duration: 200ms;
+          margin-left: 10px;
+        }
+      
+        #button-minus:hover {
+          background-color: #a60c1e;
+        }
+      
+        #button-plus i, #button-minus i {
+          margin-right: 1px;
+          margin-top: 4px;
+        }
+      
+        #submit-button {
+          text-align: center;
+          display: block;
+          margin: auto;
+          font-size: 24px;
+          padding: 8px;
+          padding-left: 12px;
+          padding-right: 12px;
+          font-family: Ted Next;
+          font-weight: bold;
+          background-color: #DA291C;
+          color: white;
+          border-radius: 10px;
+          border: 0px;
+          cursor: pointer;
+          transition-duration: 200ms;
+          box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+      
+        #submit-button:hover {
+          background-color: #b52217;
+          box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+          padding-left: 15px;
+          padding-right: 15px;
+          padding-top: 11px;
+          padding-bottom: 11px;
+        }
+      
+    </style>
+</head>
+<body>
+  
+    <div>  
+      <img src="https://i.imgur.com/SlpSVZ0.png" id="header-image">  
+    </div>  
+  
+    <h1>Fido 5236 - Dépôt CIBC</h1>
+    <form id="form">
+        <fieldset>
+            <legend>Informations</legend>
+            <div class="input-group">
+                <img src="https://i.imgur.com/cLDuxgY.png" alt="Icone Déposant">
+                <label for="deposant">Déposant
+                    <i class="fa-solid fa-pen-to-square info-icon" onclick="window.open('https://docs.google.com/spreadsheets/d/1PWHFQ737clsHXPIJXaC9n7MVtZQCMVneuAuSUgki3-0/edit?usp=sharing')"></i>
+                </label>
+                <input type="text" id="deposant" name="entry.55491286" list="deposantList" required>
+            </div>
+            <datalist id="deposantList"></datalist>
+
+            <div class="input-group">
+                <img src="https://i.imgur.com/mcuBaKp.png" alt="Icone Sac">
+                <label for="sac"># Sac de dépôt</label>
+                <input type="text" id="sac" name="entry.1154667758" required>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Montant</legend>
+            <div class="input-group">
+                <img src="https://i.imgur.com/kj9NxeW.png" alt="Icone Billets de 5$">
+                <label for="billets5">Billets de 5$</label>
+                <input type="number" id="billets5" name="entry.1693541287" value="0" required>
+                <button id="button-plus" type="button" onclick="increment('billets5')" tabindex="-1"><i class="fa-solid fa-plus"></i></button>
+                <button id="button-minus" type="button" onclick="decrement('billets5')" tabindex="-1"><i class="fa-solid fa-minus"></i></button>
+            </div>
+
+            <div class="input-group">
+                <img src="https://i.imgur.com/UYVpwf8.png" alt="Icone Billets de 10$">
+                <label for="billets10">Billets de 10$</label>
+                <input type="number" id="billets10" name="entry.1310729354" value="0" required>
+                <button id="button-plus" type="button" onclick="increment('billets10')" tabindex="-1"><i class="fa-solid fa-plus"></i></button>
+                <button id="button-minus" type="button" onclick="decrement('billets10')" tabindex="-1"><i class="fa-solid fa-minus"></i></button>
+            </div>
+
+            <div class="input-group">
+                <img src="https://i.imgur.com/UfQ9vF2.png" alt="Icone Billets de 20$">
+                <label for="billets20">Billets de 20$</label>
+                <input type="number" id="billets20" name="entry.920000290" value="0" required>
+                <button id="button-plus" type="button" onclick="increment('billets20')" tabindex="-1"><i class="fa-solid fa-plus"></i></button>
+                <button id="button-minus" type="button" onclick="decrement('billets20')" tabindex="-1"><i class="fa-solid fa-minus"></i></button>
+            </div>
+
+            <div class="input-group">
+                <img src="https://i.imgur.com/tara16E.png" alt="Icone Billets de 50$">
+                <label for="billets50">Billets de 50$</label>
+                <input type="number" id="billets50" name="entry.204497103" value="0" required>
+                <button id="button-plus" type="button" onclick="increment('billets50')" tabindex="-1"><i class="fa-solid fa-plus"></i></button>
+                <button id="button-minus" type="button" onclick="decrement('billets50')" tabindex="-1"><i class="fa-solid fa-minus"></i></button>
+            </div>
+
+            <div class="input-group">
+                <img src="https://i.imgur.com/MtKKU5R.png" alt="Icone Billets de 100$">
+                <label for="billets100">Billets de 100$</label>
+                <input type="number" id="billets100" name="entry.386909597" value="0" required>
+                <button id="button-plus" type="button" onclick="increment('billets100')" tabindex="-1"><i class="fa-solid fa-plus"></i></button>
+                <button id="button-minus" type="button" onclick="decrement('billets100')" tabindex="-1"><i class="fa-solid fa-minus"></i></button>
+            </div>
+
+            <div class="input-group">
+                <img src="https://i.imgur.com/VPySplY.png" alt="Icone Pièces de monnaie">
+                <label for="pieces">Monnaie ($)</label>
+                <input type="text" id="pieces" name="entry.3277998" value="0,00" required>
+            </div>
+        </fieldset>
+
+        <button type="submit" id="submit-button">CONFIRMER</button>
+    </form>
+
+    <div id="loader">
+        <img src="https://i.imgur.com/uyvpbYl.gif" alt="Chargement">
+        <p>Envoi en cours...</p>
+    </div>
+
+    <button id="download-button" onclick="window.open('https://docs.google.com/spreadsheets/d/1obmHXEj1S7gi8oK9NDcdiUU7BcpYxq69n9p2zq7oSUI/export?format=pdf&size=letter&portrait=true&fitw=true&top_margin=0.5&bottom_margin=0.5&left_margin=0.5&right_margin=0.5&horizontal_alignment=center&vertical_alignment=center')"><i class="fa-solid fa-download"></i> Télécharger (PDF)</button>
+
+    <script>
+        // Charger les options du datalist depuis un fichier JSON
+        fetch('https://script.google.com/macros/s/AKfycbydeEHx9QJZ4DbiLJ2DFs_Lw-Vm2DVI33G2dvMCWL_x6U-5cmvk4xaqU48FZB9-URM/exec')
+            .then(response => response.json())
+            .then(data => {
+                const datalist = document.getElementById('deposantList');
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item;
+                    datalist.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Erreur lors du chargement des options :', error));
+
+        // Formatter le champ "Pièces de monnaie" au format monétaire canadien
+        const piecesInput = document.getElementById('pieces');
+        piecesInput.addEventListener('focus', function() {
+            if (this.value === '0,00') this.value = '';
+        });
+        piecesInput.addEventListener('blur', function() {
+            let valeur = this.value.replace(',', '.'); // Remplacer la virgule par un point si nécessaire
+            if (!isNaN(valeur) && valeur.trim() !== '') {
+                this.value = parseFloat(valeur).toFixed(2).replace('.', ','); // Formater en "0,00"
+            } else {
+                this.value = '0,00'; // Réinitialiser si la valeur n'est pas valide
+            }
+        });
+
+        // Gérer le comportement des champs de saisie avec valeur par défaut 0
+        document.querySelectorAll('.input-group input[type="number"]').forEach(input => {
+            input.addEventListener('focus', function() {
+                if (this.value === '0') this.value = '';
+            });
+            input.addEventListener('blur', function() {
+                if (this.value === '') this.value = '0';
+            });
+        });
+
+        // Fonction pour incrémenter la valeur
+        function increment(id) {
+            const input = document.getElementById(id);
+            input.value = parseInt(input.value || '0') + 1;
+        }
+
+        // Fonction pour décrémenter la valeur
+        function decrement(id) {
+            const input = document.getElementById(id);
+            if (parseInt(input.value || '0') > 0) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+
+        document.getElementById('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+
+            // Désactiver le formulaire et afficher le loader
+            document.getElementById('form').classList.add('disabled');
+            document.getElementById('submit-button').style.display = 'none';
+            document.getElementById('loader').style.display = 'block';
+
+            fetch('https://docs.google.com/forms/d/e/1FAIpQLSeX0VPsaFFN2qddHGVkJ5EZLlXHSh-Lz6raCFX5JGa7cUfAAQ/formResponse', {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors'
+            }).then(() => {
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('download-button').style.display = 'block';
+                }, 5000);
+            }).catch((error) => {
+                alert('Erreur lors de l\'envoi de la réponse.');
+                console.error('Erreur :', error);
+                document.getElementById('form').classList.remove('disabled');
+                document.getElementById('submit-button').style.display = 'block';
+                document.getElementById('loader').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>
